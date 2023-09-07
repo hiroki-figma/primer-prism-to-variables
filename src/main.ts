@@ -2,14 +2,26 @@ import { on, once, showUI } from "@create-figma-plugin/utilities";
 
 import { importDataType, CloseHandler, CreateVariablesHandler } from "./types";
 
+import { isValidJSON, isPrismColorObject } from "./utils";
+
 export default function () {
   on<CreateVariablesHandler>(
     "CREATE_VARIABLES",
     function (data: importDataType) {
       if (data.value !== "") {
+        if (!isValidJSON(data.value)) {
+          figma.notify("⚠️ Set valid JSON");
+          return false;
+        }
+
         const colors = JSON.parse(data.value);
         const newCollectionName = data.name;
         const step = Number(data.step);
+
+        if (!isPrismColorObject(colors)) {
+          figma.notify("⚠️ Set valid Primer Prism JSON");
+          return false;
+        }
 
         const localCollectionsNames = figma.variables
           .getLocalVariableCollections()

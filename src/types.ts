@@ -6,6 +6,10 @@ export type importDataType = {
   value: string;
 };
 
+export type prismColorType = {
+  [colorName: string]: string[] | string;
+};
+
 export interface CreateVariablesHandler extends EventHandler {
   name: "CREATE_VARIABLES";
   handler: (data: importDataType) => void;
